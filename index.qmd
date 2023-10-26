@@ -2,15 +2,11 @@
 title: "Chicago restaurant violations"
 format: 
   dashboard:
-    orientation: columns
     theme: lux
 logo: https://github.com/rstudio/vetiver-python/blob/main/docs/figures/logo.png?raw=true
-output: asis
-jupyter: python3
 ---
 
 ```{python}
-#| include: false
 #| tags: [parameters]
 
 # import model and metadata 
@@ -47,21 +43,22 @@ inspections_new["results"] = inspections_new["results"].map({"PASS": 0, "FAIL": 
 ```
 
 # Model card
-## Column
-### Row {height="33%"}
-::: {.valuebox}
+
+## Row 
+
+::: {.valuebox color="info"}
 `{python} v.description`
 
 `{python} v.model_name`
 :::
 
-::: {.valuebox}
+::: {.valuebox color="success"}
 Model age
 
 `{python} days_old.days` days old
 :::
 
-### Row
+## Row
 
 Model details
 
@@ -91,7 +88,8 @@ Caveats & recommendations
 
 # Model performance
 
-## Column
+Model performance over time. In this context, _performance_ is the statistical properties of the model, specifically, accuracy and recall. The data is grouped by week, starting in January of 2023 until July of 2023.
+
 ```{python}
 import itables
 
@@ -113,27 +111,20 @@ itables.show(metrics_df)
 plot_metrics(metrics_df).show()
 ```
 
-## Column {.sidebar}
-
-This tab is used to see model performance over time. In this context, _performance_ is the statistical properties of the model, specifically, accuracy and recall. 
-
-The data is grouped by week, starting in January of 2023 until July of 2023.
 
 # Misclassified results
 
-## Column
+Inspections that our model misclassified, in either direction.
 
 ```{python}
 bad_pred = inspections_new.loc[(inspections_new['preds'] != inspections_new['results'])].reset_index()
 
 itables.show(bad_pred[["results", "preds", "facility_type", "risk", "aka_name", "inspection_date"]])
 ```
----
+
+
 ```{python}
 px.histogram(bad_pred, x = "month", color="facility_type", title = "Misclassified inspections per month by facility type")
 ```
-
-## Column {.sidebar}
-This table shows the new inspections that our model misclassified, in either direction.
 
 
